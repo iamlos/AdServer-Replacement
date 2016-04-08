@@ -1,0 +1,3 @@
+HTML > BODY > DIV:nth-of-type(3) > DIV:nth-of-type(2) > DIV:nth-of-type(2) > DIV:nth-of-type(1) > DIV:nth-of-type(1)
+
+<div class="ttStage stage"></div>
