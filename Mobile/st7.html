@@ -3,7 +3,8 @@
 
     var ttAddsPerLanguage = {
         de: {
-            stage: "/de/business/kmu/admin/sme-adserver-mowe-home-stage/_jcr_content/par/adstageconfig_15.html",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
+            stageTarget: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
             teasers: [
                 "/de/business/kmu/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/one/adteaserconfig_8.html",
                 "/de/business/kmu/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/three/adteaserconfig_20.html",
@@ -11,7 +12,8 @@
             ]
         },
         fr: {
-            stage: "/fr/business/pme/admin/sme-adserver-mowe-home-stage/_jcr_content/par/adstageconfig_15.html",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
+            stageTarget: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
             teasers: [
                 "/fr/business/pme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/one/adteaserconfig_16.html",
                 "/fr/business/pme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/three/adteaserconfig_16.html",
@@ -19,7 +21,8 @@
             ]
         },
         it: {
-            stage: "/it/business/pmi/admin/sme-adserver-mowe-home-stage/_jcr_content/par/adstageconfig_15.html",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
+            stageTarget: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
             teasers: [
                 "/it/business/pmi/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/two/adteaserconfig_16.html",
                 "/it/business/pmi/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/four/adteaserconfig_15.html",
@@ -27,7 +30,8 @@
             ]
         },
         en: {
-            stage: "/en/business/sme/admin/sme-adserver-mowe-home-stage/_jcr_content/par/adstageconfig_15.html",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
+            stageTarget: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
             teasers: [
                 "/en/business/sme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/two/adteaserconfig_16.html",
                 "/en/business/sme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/four/adteaserconfig_14.html",
@@ -66,14 +70,15 @@
 
     function ttChangeStage() {
         if ($(".ttStage").length == 0) {
-            $(".stageMobile .stage").first().addClass("ttStage");
+            $(".stageMobile").parent().prepend('<div class="ttStage stage"></div>');
         }
+        $(".ttStage").insertAfter("div[role='banner']");
         $(".ttStage").html(ttAdds.stage);
-        var targetNode = $(".stageMobile")[0];
+        var targetNode = $(".ttStage")[0];
         ttObserver.observe(targetNode, ttObserverConfig);
         $(".ttStage").on("remove", function () {
             $(".ttStage").remove();
-            if ($(".ttStage").length == 0) $(".stageMobile").prepend("<div class='ttStage stage'></div>");
+            if ($(".ttStage").length == 0) $(".stageMobile").parent().prepend("<div class='ttStage stage'></div>");
             ttChangeStage();
         });
         $('#scs-stage a').click(function (e) {
@@ -111,12 +116,12 @@
     }
 
     var ttAddsCounter = ttAdds.teasers.length + 1; // teasers and stage
-    $.get(ttDataEndpoint + ttAdds.stage,
-            function(data) {
-                ttAdds.stage = data;
-                ttAddsCounter--;
-                if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
-            });
+    //$.get(ttDataEndpoint + ttAdds.stage,
+    //      function(data) {
+    ttAdds.stage = '<div class="stage" style="width: 100%"><div id="#scs-stage" style="width: 100%"><a href=' + ttAdds.stageTarget + '><img style="width: 100%" src=' + ttAdds.stage + '></img></a></div></div>';
+    ttAddsCounter--;
+    if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
+    //     });
     $.get(ttDataEndpoint + ttAdds.teasers[0], function
             (data) {
         ttAdds.teasers[0] = data;

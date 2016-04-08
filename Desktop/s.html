@@ -1,10 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script>
+    var ttDataEndpoint = "https://www.swisscom.ch";
 
-</body>
-</html>
+    var ttAddsPerLanguage = {
+        de: {
+            stage: "/de/business/kmu/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html"
+        },
+        fr: {
+            stage: "/fr/business/pme/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html"
+        },
+        it: {
+            stage: "/it/business/pmi/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html"
+        },
+        en: {
+            stage: "/en/business/sme/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html"
+        }
+    };
+
+    /* Do not change below this line */
+
+    mboxDefine('ele', 'AD_Stage_Click');
+
+    function ttGetLanguageFromUrl(defaultLanguage) {
+        var language = defaultLanguage ? defaultLanguage : "de";
+        switch (true) {
+            case /\/fr\//.test(window.location.href):
+                language = "fr";
+                break;
+            case /\/it\//.test(window.location.href):
+                language = "it";
+                break;
+            case /\/en\//.test(window.location.href):
+                language = "en";
+                break;
+        }
+        return language;
+    }
+
+    var ttLang = ttGetLanguageFromUrl();
+
+    var ttAdds = ttAddsPerLanguage[ttLang];
+
+    var ttObserver = new MutationObserver(function() { ttChangeStage(); });
+
+    var ttObserverConfig = { childList: true };
+
+    function ttChangeStage() {
+        $("#scs-stage").parent().replaceWith(ttAdds.stage);
+        var targetNode = $("#scs-stage").parent()[0];
+        ttObserver.observe(targetNode, ttObserverConfig);
+        $('#scs-stage a').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            mboxUpdate('AD_Stage_Click');
+            var $self = $(this);
+            setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
+        });
+    }
+
+    var ttAddsLoaded = false;
+    var ttDocumentReady = false;
+
+    function ttStart() {
+        if (ttAddsLoaded && ttDocumentReady) {
+            ttChangeStage();
+        }
+    }
+
+    var ttAddsCounter = 1; // teasers and stage
+    $.get(ttDataEndpoint + ttAdds.stage,
+            function(data) {
+                ttAdds.stage = data;
+                ttAddsCounter--;
+                if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
+            });
+
+    $(document).ready(function() { ttDocumentReady = true; ttStart(); });
+</script>
