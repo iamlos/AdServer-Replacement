@@ -116,12 +116,9 @@
     }
 
     var ttAddsCounter = ttAdds.teasers.length + 1; // teasers and stage
-    //$.get(ttDataEndpoint + ttAdds.stage,
-    //      function(data) {
     ttAdds.stage = '<div class="stage" style="width: 100%"><div id="#scs-stage" style="width: 100%"><a href=' + ttAdds.stageTarget + '><img style="width: 100%" src=' + ttAdds.stage + '></img></a></div></div>';
     ttAddsCounter--;
     if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
-    //     });
     $.get(ttDataEndpoint + ttAdds.teasers[0], function
             (data) {
         ttAdds.teasers[0] = data;

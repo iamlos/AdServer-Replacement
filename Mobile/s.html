@@ -1,0 +1,85 @@
+<script>
+    var ttDataEndpoint = "https://www.swisscom.ch";
+
+    var ttAddsPerLanguage = {
+        de: {
+            stage: "/de/business/kmu/admin/sme-adserver-mowe-home-stage/_jcr_content/par/adstageconfig_15.html"
+        },
+        fr: {
+            stage: "/fr/business/pme/admin/sme-adserver-mowe-home-stage/_jcr_content/par/adstageconfig_15.html"
+        },
+        it: {
+            stage: "/it/business/pmi/admin/sme-adserver-mowe-home-stage/_jcr_content/par/adstageconfig_15.html"
+        },
+        en: {
+            stage: "/en/business/sme/admin/sme-adserver-mowe-home-stage/_jcr_content/par/adstageconfig_15.html"
+        }
+    };
+
+    /* Do not change below this line */
+    mboxDefine('ele', 'AD_Stage_Click');
+
+    function ttGetLanguageFromUrl(defaultLanguage) {
+        var language = defaultLanguage ? defaultLanguage : "de";
+        switch (true) {
+            case /\/fr\//.test(window.location.href):
+                language = "fr";
+                break;
+            case /\/it\//.test(window.location.href):
+                language = "it";
+                break;
+            case /\/en\//.test(window.location.href):
+                language = "en";
+                break;
+        }
+        return language;
+    }
+
+    var ttLang = ttGetLanguageFromUrl();
+
+    var ttAdds = ttAddsPerLanguage[ttLang];
+
+    var ttObserver = new MutationObserver(function() { ttChangeStage(); });
+
+    var ttObserverConfig = { childList: true };
+
+    function ttChangeStage() {
+        if ($(".ttStage").length == 0) {
+            $(".stageMobile .stage").first().addClass("ttStage");
+        }
+        $(".ttStage").html(ttAdds.stage);
+        var targetNode = $(".stageMobile")[0];
+        ttObserver.observe(targetNode, ttObserverConfig);
+        $(".ttStage").on("remove", function () {
+            $(".ttStage").remove();
+            if ($(".ttStage").length == 0) $(".stageMobile").prepend("<div class='ttStage stage'></div>");
+            ttChangeStage();
+        });
+        $('#scs-stage a').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            mboxUpdate('AD_Stage_Click');
+            var $self = $(this);
+            setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
+        });
+    }
+
+    var ttAddsLoaded = false;
+    var ttDocumentReady = false;
+
+    function ttStart() {
+        if (ttAddsLoaded && ttDocumentReady) {
+            ttChangeStage();
+        }
+    }
+
+    var ttAddsCounter = 1;
+    $.get(ttDataEndpoint + ttAdds.stage,
+            function(data) {
+                ttAdds.stage = data;
+                ttAddsCounter--;
+                if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
+            });
+
+    $(document).ready(function() { ttDocumentReady = true; ttStart(); });
+</script>
