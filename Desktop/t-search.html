@@ -1,0 +1,89 @@
+<script>
+    var ttDataEndpoint = "https://www.swisscom.ch";
+
+    var ttAddsPerLanguage = {
+        de: {
+            teasers: [
+                "/de/business/kmu/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/one/adteaserconfig_8.html"
+            ]
+        },
+        fr: {
+            teasers: [
+                "/fr/business/pme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/one/adteaserconfig_16.html"
+            ]
+        },
+        it: {
+            teasers: [
+                "/it/business/pmi/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/two/adteaserconfig_16.html"
+            ]
+        },
+        en: {
+            teasers: [
+                "/en/business/sme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/two/adteaserconfig_16.html"
+            ]
+        }
+    };
+
+    /* Do not change below this line */
+
+    mboxDefine('ele', 'AD_Teaser_Click');
+
+    function ttGetLanguageFromUrl(defaultLanguage) {
+        var language = defaultLanguage ? defaultLanguage : "de";
+        switch (true) {
+            case /\/fr\//.test(window.location.href):
+                language = "fr";
+                break;
+            case /\/it\//.test(window.location.href):
+                language = "it";
+                break;
+            case /\/en\//.test(window.location.href):
+                language = "en";
+                break;
+        }
+        return language;
+    }
+
+    var ttLang = ttGetLanguageFromUrl();
+
+    var ttAdds = ttAddsPerLanguage[ttLang];
+
+    var ttObserver = new MutationObserver(function() { ttChangeStage(); });
+
+    var ttObserverConfig = { childList: true };
+
+    function ttChangeTeasers() {
+        var $teasers = $(".section.teaser");
+        $($teasers[0]).html(ttAdds.teasers[0]);
+        $($teasers[1]).html(ttAdds.teasers[1]);
+        $($teasers[2]).html(ttAdds.teasers[2]);
+
+        $teasers.find('a').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            mboxUpdate('AD_Teaser_Click');
+            var $self = $(this);
+            setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
+        });
+    }
+
+    var ttAddsLoaded = false;
+    var ttDocumentReady = false;
+
+    function ttStart() {
+        if (ttAddsLoaded && ttDocumentReady) {
+            ttChangeTeasers();
+        }
+    }
+
+    var ttAddsCounter = ttAdds.teasers.length;
+
+    $.get(ttDataEndpoint + ttAdds.teasers[0], function
+            (data) {
+        ttAdds.teasers[0] = data;
+        ttAddsCounter--;
+        if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
+    });
+
+    $(document).ready(function() { ttDocumentReady = true; ttStart(); });
+</script>
