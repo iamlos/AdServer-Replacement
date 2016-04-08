@@ -81,11 +81,9 @@
             if ($(".ttStage").length == 0) $(".stageMobile").parent().prepend("<div class='ttStage stage'></div>");
             ttChangeStage();
         });
-        console.log($('#scs-stage a'));
         $('#scs-stage a').click(function (e) {
             e.preventDefault();
             e.stopPropagation();
-            console.log("STAGE TRACK");
             mboxUpdate('AD_Stage_Click');
             var $self = $(this);
             setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
