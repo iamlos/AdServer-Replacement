@@ -1,22 +1,27 @@
+<style>
+    .stage { display: none }
+    .ttStage {display: block !important}
+</style>
+
 <script>
     var ttDataEndpoint = "https://www.swisscom.ch";
 
     var ttAddsPerLanguage = {
         de: {
-            stage: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
-            stageTarget: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/08_StageMobile_iPhone_SE_640x340px_de?$Original%20Size$&?fmt=png&scl=1",
+            stageTarget: "https://www.swisscom.ch/de/business/kmu/produkte/apple-iphone-se(N_NATEL%20BUS%202.0%20XL,24,000000000011008326).html",
         },
         fr: {
-            stage: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
-            stageTarget: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/08_StageMobile_iPhone_SE_640x340px_fr?$Original%20Size$&?fmt=png&scl=1",
+            stageTarget: "https://www.swisscom.ch/fr/business/pme/produits/apple-iphone-se(N_NATEL%20BUS%202.0%20XL,24,000000000011008326).html",
         },
         it: {
-            stage: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
-            stageTarget: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/08_StageMobile_iPhone_SE_640x340px_it?$Original%20Size$&?fmt=png&scl=1",
+            stageTarget: "https://www.swisscom.ch/it/business/pmi/prodotti/apple-iphone-se(N_NATEL%20BUS%202.0%20XL,24,000000000011008326).html",
         },
         en: {
-            stage: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
-            stageTarget: "//swisscom.scene7.com/is/image/Swisscom/Upsell?$hide-stoerer-bubble=1&$price-value=1&$hide-layout1-content=0&$hide-layout1-header=0&$hide-layout3-header=1&$hide-layout3-content=1&?fmt=png&scl=1",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/08_StageMobile_iPhone_SE_640x340px_en?$Original%20Size$&?fmt=png&scl=1",
+            stageTarget: "https://www.swisscom.ch/en/business/sme/products/apple-iphone-se(N_NATEL%20BUS%202.0%20XL,24,000000000011008326).html",
         }
     };
 
@@ -43,23 +48,13 @@
 
     var ttAdds = ttAddsPerLanguage[ttLang];
 
-    var ttObserver = new MutationObserver(function() { ttChangeStage(); });
-
-    var ttObserverConfig = { childList: true };
-
     function ttChangeStage() {
         if ($(".ttStage").length == 0) {
-            $(".stageMobile").parent().prepend('<div class="ttStage stage"></div>');
+            $(".stageMobile").parent().before('<div class="ttStage stage"></div>');
         }
-        $(".ttStage").insertAfter("div[role='banner']");
+
         $(".ttStage").html(ttAdds.stage);
-        var targetNode = $(".ttStage")[0];
-        ttObserver.observe(targetNode, ttObserverConfig);
-        $(".ttStage").on("remove", function () {
-            $(".ttStage").remove();
-            if ($(".ttStage").length == 0) $(".stageMobile").parent().prepend("<div class='ttStage stage'></div>");
-            ttChangeStage();
-        });
+
         $('#scs-stage a').click(function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -72,17 +67,18 @@
     var ttAddsLoaded = false;
     var ttDocumentReady = false;
 
+
     function ttStart() {
         if (ttAddsLoaded && ttDocumentReady) {
             ttChangeStage();
         }
     }
 
-    var ttAddsCounter = 1; // teasers and stage
+    ttAdds.stage = '<div style="width: 100%"><div id="scs-stage" style="width: 100%"><a href=' + ttAdds.stageTarget + '><img style="width: 100%" src=' + ttAdds.stage + '></a></div></div>';
+    ttAddsLoaded = true;
+    ttStart();
 
-    ttAdds.stage = '<div class="stage" style="width: 100%"><div id="scs-stage" style="width: 100%"><a href=' + ttAdds.stageTarget + '><img style="width: 100%" src=' + ttAdds.stage + '></a></div></div>';
-    ttAddsCounter--;
-    if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
-
-    $(document).ready(function() { ttDocumentReady = true; ttStart(); });
+    $(document).ready(function() {
+        $(".stageMobile").parent().before('<div class="ttStage stage"></div>'); ttDocumentReady = true; ttStart();
+    });
 </script>
