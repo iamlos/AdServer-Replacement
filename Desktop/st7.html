@@ -1,9 +1,13 @@
-<script>
-    var ttDataEndpoint = "https://www.swisscom.ch";
+<style>
+    .stage { display: none }
+</style>
 
+<script>
     var ttAddsPerLanguage = {
         de: {
-            stage: "/de/business/kmu/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
+            stageTarget: "",
+
             teasers: [
                 "/de/business/kmu/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/one/adteaserconfig_8.html",
                 "/de/business/kmu/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/three/adteaserconfig_20.html",
@@ -11,7 +15,9 @@
             ]
         },
         fr: {
-            stage: "/fr/business/pme/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
+            stageTarget: "",
+
             teasers: [
                 "/fr/business/pme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/one/adteaserconfig_16.html",
                 "/fr/business/pme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/three/adteaserconfig_16.html",
@@ -19,7 +25,9 @@
             ]
         },
         it: {
-            stage: "/it/business/pmi/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
+            stageTarget: "",
+
             teasers: [
                 "/it/business/pmi/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/two/adteaserconfig_16.html",
                 "/it/business/pmi/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/four/adteaserconfig_15.html",
@@ -27,7 +35,9 @@
             ]
         },
         en: {
-            stage: "/en/business/sme/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html",
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
+            stageTarget: "",
+
             teasers: [
                 "/en/business/sme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/two/adteaserconfig_16.html",
                 "/en/business/sme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/four/adteaserconfig_14.html",
@@ -35,8 +45,6 @@
             ]
         }
     };
-
-    /* Do not change below this line */
 
     mboxDefine('ele', 'AD_Stage_Click');
     mboxDefine('ele', 'AD_Teaser_Click');
@@ -61,49 +69,36 @@
 
     var ttAdds = ttAddsPerLanguage[ttLang];
 
-    var ttObserver = new MutationObserver(function() { ttChangeStage(); });
+    var stageHtml =
+            '<a id="ttLink" href="' + ttAdds.stageTarget + '">' +
+            '<div style="margin-top: -123px; height: 480px; width: 100%; background: no-repeat center center; background-image: url(' +
+            ttAdds.stage + '">' + '</div></a>';
 
-    var ttObserverConfig = { childList: true };
+    var ttAddsLoaded = false;
+    var ttDocumentReady = false;
 
-    function ttChangeStage() {
-        $("#scs-stage").parent().replaceWith(ttAdds.stage);
-        ttObserver.observe($("#scs-stage").parent()[0], ttObserverConfig);
-        $('#scs-stage a').click(function (e) {
+    $(document).ready(function () {
+        ttDocumentReady = true;
+        $(".scs-pageheader").first().after(stageHtml);
+
+        $("#ttLink").click(function (e) {
             e.preventDefault();
             e.stopPropagation();
             mboxUpdate('AD_Stage_Click');
             var $self = $(this);
             setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
         });
-    }
 
-    function ttChangeTeasers() {
-        var $teasers = $(".section.teaser");
-        $($teasers[0]).html(ttAdds.teasers[0]);
-        $($teasers[1]).html(ttAdds.teasers[1]);
-        $($teasers[2]).html(ttAdds.teasers[2]);
-
-        $teasers.find('a').click(function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            mboxUpdate('AD_Teaser_Click');
-            var $self = $(this);
-            setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
-        });
-    }
-
-    var ttAddsLoaded = false;
-    var ttDocumentReady = false;
+        ttStart();
+    });
 
     function ttStart() {
         if (ttAddsLoaded && ttDocumentReady) {
-            ttChangeStage();
             ttChangeTeasers();
         }
     }
 
-    var ttAddsCounter = ttAdds.teasers.length + 1; // teasers and stage
-    ttAdds.stage = '<div class="stage" style="width: 100%"><div id="#scs-stage" style="width: 100%"><a href=' + ttAdds.stageTarget + '><img style="width: 100%" src=' + ttAdds.stage + '></a></div></div>';
+    var ttAddsCounter = ttAdds.teasers.length; // teasers and stage
     ttAddsCounter--;
     if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
     $.get(ttDataEndpoint + ttAdds.teasers[0], function
@@ -123,6 +118,4 @@
                 ttAddsCounter--;
                 if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
             });
-
-    $(document).ready(function() { ttDocumentReady = true; ttStart(); });
 </script>
