@@ -1,3 +1,15 @@
+<script>
+    $(document).ready(function() {
+        var $header = $(".scs-legacy-header");
+        $header.removeClass("scs-pageheader-themeWhite");
+        $header.addClass("scs-pageheader-themeDark");
+    });
+</script>
+<style>
+    .scs-stage-text p, .scs-stage-text h2, .logotype, #scs-pageheader-metanav *, .scs-meta-arrow {
+        color: #001155 !important;
+    }
+</style>
 <style>
     .stage { display: none }
 </style>
@@ -6,19 +18,19 @@
     var ttAddsPerLanguage = {
         de: {
             stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
-            stageTarget: ""
+            stageTarget: "https://www.swisscom.ch/de/privatkunden/produkte/huawei-p9(N_NATEL%20RES%202.0%20XL,24,000000000011007791).html "
         },
         fr: {
-            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
-            stageTarget: ""
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_fr_1680x480px?fmt=png&scl=1",
+            stageTarget: "https://www.swisscom.ch/fr/clients-prives/produits/huawei-p9(N_NATEL%20RES%202.0%20XL,24,000000000011007791).html"
         },
         it: {
-            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
-            stageTarget: ""
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_it_1680x480px?fmt=png&scl=1",
+            stageTarget: "https://www.swisscom.ch/it/clienti-privati/prodotti/huawei-p9(N_NATEL%20RES%202.0%20XL,24,000000000011007791).html"
         },
         en: {
-            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
-            stageTarget: ""
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_en_1680x480px?fmt=png&scl=1",
+            stageTarget: "https://www.swisscom.ch/en/residential/products/huawei-p9(N_NATEL%20RES%202.0%20XL,24,000000000011007791).html"
         }
     };
 
@@ -46,7 +58,7 @@
 
     var stageHtml =
             '<a id="ttLink" href="' + ttAdds.stageTarget + '">' +
-            '<div style="margin-top: -123px; height: 480px; width: 100%; background: no-repeat center center; background-image: url(' +
+            '<div style="margin-bottom: 24px; margin-top: -123px; height: 480px; width: 100%; background: no-repeat center center; background-image: url(' +
             ttAdds.stage + '">' + '</div></a>';
 
     $(document).ready(function () {
