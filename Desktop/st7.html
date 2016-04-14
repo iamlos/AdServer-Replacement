@@ -3,11 +3,12 @@
 </style>
 
 <script>
+    var ttDataEndpoint = "https://www.swisscom.ch";
+
     var ttAddsPerLanguage = {
         de: {
             stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
             stageTarget: "",
-
             teasers: [
                 "/de/business/kmu/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/one/adteaserconfig_8.html",
                 "/de/business/kmu/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/three/adteaserconfig_20.html",
@@ -17,7 +18,6 @@
         fr: {
             stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
             stageTarget: "",
-
             teasers: [
                 "/fr/business/pme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/one/adteaserconfig_16.html",
                 "/fr/business/pme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/three/adteaserconfig_16.html",
@@ -27,7 +27,6 @@
         it: {
             stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
             stageTarget: "",
-
             teasers: [
                 "/it/business/pmi/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/two/adteaserconfig_16.html",
                 "/it/business/pmi/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/four/adteaserconfig_15.html",
@@ -37,7 +36,6 @@
         en: {
             stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
             stageTarget: "",
-
             teasers: [
                 "/en/business/sme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/two/adteaserconfig_16.html",
                 "/en/business/sme/admin/sme-adserver-home-teaser/_jcr_content/par/columncontainer/four/adteaserconfig_14.html",
@@ -47,7 +45,6 @@
     };
 
     mboxDefine('ele', 'AD_Stage_Click');
-    mboxDefine('ele', 'AD_Teaser_Click');
 
     function ttGetLanguageFromUrl(defaultLanguage) {
         var language = defaultLanguage ? defaultLanguage : "de";
@@ -74,23 +71,26 @@
             '<div style="margin-top: -123px; height: 480px; width: 100%; background: no-repeat center center; background-image: url(' +
             ttAdds.stage + '">' + '</div></a>';
 
-    var ttAddsLoaded = false;
-    var ttDocumentReady = false;
 
-    $(document).ready(function () {
-        ttDocumentReady = true;
-        $(".scs-pageheader").first().after(stageHtml);
+    mboxDefine('ele', 'AD_Teaser_Click');
 
-        $("#ttLink").click(function (e) {
+    function ttChangeTeasers() {
+        var $teasers = $(".section.teaser");
+        $($teasers[0]).html(ttAdds.teasers[0]);
+        $($teasers[1]).html(ttAdds.teasers[1]);
+        $($teasers[2]).html(ttAdds.teasers[2]);
+
+        $teasers.find('a').click(function (e) {
             e.preventDefault();
             e.stopPropagation();
-            mboxUpdate('AD_Stage_Click');
+            mboxUpdate('AD_Teaser_Click');
             var $self = $(this);
             setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
         });
+    }
 
-        ttStart();
-    });
+    var ttAddsLoaded = false;
+    var ttDocumentReady = false;
 
     function ttStart() {
         if (ttAddsLoaded && ttDocumentReady) {
@@ -98,9 +98,8 @@
         }
     }
 
-    var ttAddsCounter = ttAdds.teasers.length; // teasers and stage
-    ttAddsCounter--;
-    if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
+    var ttAddsCounter = ttAdds.teasers.length;
+
     $.get(ttDataEndpoint + ttAdds.teasers[0], function
             (data) {
         ttAdds.teasers[0] = data;
@@ -118,4 +117,18 @@
                 ttAddsCounter--;
                 if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
             });
+
+    $(document).ready(function() {
+        $(".scs-pageheader").first().after(stageHtml);
+
+        $("#ttLink").click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            mboxUpdate('AD_Stage_Click');
+            var $self = $(this);
+            setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
+        });
+        ttDocumentReady = true;
+        ttStart();
+    });
 </script>
