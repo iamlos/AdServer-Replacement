@@ -1,22 +1,26 @@
-<script>
-    var ttDataEndpoint = "https://www.swisscom.ch";
+<style>
+    .stage { display: none }
+</style>
 
+<script>
     var ttAddsPerLanguage = {
         de: {
-            stage: "/de/business/kmu/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html"
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
+            stageTarget: ""
         },
         fr: {
-            stage: "/fr/business/pme/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html"
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
+            stageTarget: ""
         },
         it: {
-            stage: "/it/business/pmi/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html"
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
+            stageTarget: ""
         },
         en: {
-            stage: "/en/business/sme/admin/sme-adserver-home-stage1/_jcr_content/par/adstageconfig_1.html"
+            stage: "//swisscom.scene7.com/is/image/Swisscom/07_Fullbleed_huawei_p9_promo_de_1680x480px?fmt=png&scl=1",
+            stageTarget: ""
         }
     };
-
-    /* Do not change below this line */
 
     mboxDefine('ele', 'AD_Stage_Click');
 
@@ -40,36 +44,20 @@
 
     var ttAdds = ttAddsPerLanguage[ttLang];
 
-    var ttObserver = new MutationObserver(function() { ttChangeStage(); });
+    var stageHtml =
+            '<a id="ttLink" href="' + ttAdds.stageTarget + '">' +
+            '<div style="margin-top: -123px; height: 480px; width: 100%; background: no-repeat center center; background-image: url(' +
+            ttAdds.stage + '">' + '</div></a>';
 
-    var ttObserverConfig = { childList: true };
+    $(document).ready(function () {
+        $(".scs-pageheader").first().after(stageHtml);
 
-    function ttChangeStage() {
-        $("#scs-stage").parent().replaceWith(ttAdds.stage);
-        var targetNode = $("#scs-stage").parent()[0];
-        ttObserver.observe(targetNode, ttObserverConfig);
-        $('#scs-stage a').click(function (e) {
+        $("#ttLink").click(function (e) {
             e.preventDefault();
             e.stopPropagation();
             mboxUpdate('AD_Stage_Click');
             var $self = $(this);
             setTimeout(function() { window.location.href = $self.attr('href'); }, 500);
         });
-    }
-
-    var ttAddsLoaded = false;
-    var ttDocumentReady = false;
-
-    function ttStart() {
-        if (ttAddsLoaded && ttDocumentReady) {
-            ttChangeStage();
-        }
-    }
-
-    var ttAddsCounter = 1; // teasers and stage
-    ttAdds.stage = '<div class="stage" style="width: 100%"><div id="#scs-stage" style="width: 100%"><a href=' + ttAdds.stageTarget + '><img style="width: 100%" src=' + ttAdds.stage + '></a></div></div>';
-    ttAddsCounter--;
-    if (ttAddsCounter <= 0) { ttAddsLoaded = true; ttStart(); }
-
-    $(document).ready(function() { ttDocumentReady = true; ttStart(); });
+    });
 </script>
