@@ -23,7 +23,7 @@ function ttTrackStageViewSica(sVar, campaignName) {
 
     overrides.pageName=sVar.pageName;
     overrides.events="event17";
-    if (sVar11.indexOf("StageClick") > -1)
+    if (!(sVar11.indexOf("StageClick") > -1))
         overrides.eVar11="AdTarget|StageView|${campaign.name}|"+campaignName;
     overrides.eVar14=sVar.eVar14;
     overrides.eVar47=sVar.eVar47;
