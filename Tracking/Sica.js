@@ -4,31 +4,23 @@ var ttCampaignName="Test";
 function ttTrackStageClickSica(sVar, campaignName) {
     var overrides = {};
 
-    sVar.linkTrackVars="eVar11,eVar14,eVar47,pageName,events";
+    sVar.linkTrackVars="eVar11,eVar13,eVar14,eVar47,pageName,events";
     sVar.linkTrackEvents="event18";
-
-    overrides.pageName=sVar.pageName;
     overrides.events="event18";
     overrides.eVar11="AdTarget|StageClick|${campaign.name}|"+campaignName;
     overrides.eVar13="AdTarget|${campaign.name}|"+campaignName;
-    overrides.eVar14=sVar.eVar14;
-    overrides.eVar47=sVar.eVar47;
     sVar.tl(true, "o", "AdTarget|StageClick|${campaign.name}|"+campaignName, overrides);
 }
 
 function ttTrackStageViewSica(sVar, campaignName) {
     var overrides = {};
 
-    sVar.linkTrackVars="eVar11,eVar14,eVar47,pageName,events";
+    sVar.linkTrackVars="eVar11,eVar13,eVar14,eVar47,pageName,events";
     sVar.linkTrackEvents="event17";
-
-    overrides.pageName=sVar.pageName;
-    overrides.events="event17";
+    sVar.events="event17";
     if (!(sVar11.indexOf("StageClick") > -1))
         overrides.eVar11="AdTarget|StageView|${campaign.name}|"+campaignName;
-    overrides.eVar13="AdTarget|${campaign.name}|"+campaignName;
-    overrides.eVar14=sVar.eVar14;
-    overrides.eVar47=sVar.eVar47;
+    sVar.eVar13="AdTarget|${campaign.name}|"+campaignName;
     sVar.tl(true, "o", "AdTarget|StageView|${campaign.name}|"+campaignName, overrides);
 }
 
