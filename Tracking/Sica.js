@@ -10,6 +10,7 @@ function ttTrackStageClickSica(sVar, campaignName) {
     overrides.pageName=sVar.pageName;
     overrides.events="event18";
     overrides.eVar11="AdTarget|StageClick|${campaign.name}|"+campaignName;
+    overrides.eVar13="AdTarget|${campaign.name}|"+campaignName;
     overrides.eVar14=sVar.eVar14;
     overrides.eVar47=sVar.eVar47;
     sVar.tl(true, "o", "AdTarget|StageClick", overrides);
@@ -25,6 +26,7 @@ function ttTrackStageViewSica(sVar, campaignName) {
     overrides.events="event17";
     if (!(sVar11.indexOf("StageClick") > -1))
         overrides.eVar11="AdTarget|StageView|${campaign.name}|"+campaignName;
+    overrides.eVar13="AdTarget|${campaign.name}|"+campaignName;
     overrides.eVar14=sVar.eVar14;
     overrides.eVar47=sVar.eVar47;
     sVar.tl(true, "o", "AdTarget|StageView", overrides);
