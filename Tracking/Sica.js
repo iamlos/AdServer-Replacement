@@ -13,7 +13,7 @@ function ttTrackStageClickSica(sVar, campaignName) {
     overrides.eVar13="AdTarget|${campaign.name}|"+campaignName;
     overrides.eVar14=sVar.eVar14;
     overrides.eVar47=sVar.eVar47;
-    sVar.tl(true, "o", "AdTarget|StageClick", overrides);
+    sVar.tl(true, "o", "AdTarget|StageClick|${campaign.name}|"+campaignName, overrides);
 }
 
 function ttTrackStageViewSica(sVar, campaignName) {
@@ -29,7 +29,7 @@ function ttTrackStageViewSica(sVar, campaignName) {
     overrides.eVar13="AdTarget|${campaign.name}|"+campaignName;
     overrides.eVar14=sVar.eVar14;
     overrides.eVar47=sVar.eVar47;
-    sVar.tl(true, "o", "AdTarget|StageView", overrides);
+    sVar.tl(true, "o", "AdTarget|StageView|${campaign.name}|"+campaignName, overrides);
 }
 
 // mboxDefine rauslöschen
